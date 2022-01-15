@@ -6,16 +6,33 @@ import { contractABI, contractAddress, WALLET_STATUS } from '../utils/constants'
 export const TransactionContext = createContext();
 const { ethereum } = window;
 
+const handleCatch = (err) => {
+    const { code } = err;
+    if (code === WALLET_STATUS.USER_REJECTED_THE_REQUEST) {
+        alert("Please, connect your wallet to proceed");
+    }
+    console.error(err);
+    throw new Error("No ethereum object.")
+}
+
 const getEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
     const transactionContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-    console.log({ provider, signer, transactionContract });
+    return transactionContract;
 };
 
 export const TransactionProvider = ({ children }) => {
     const [connectedAccount, setConnectedAccount] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
+    const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
 
     const checkIfWalletIsConnected = async () => {
         try {
@@ -28,12 +45,7 @@ export const TransactionProvider = ({ children }) => {
                 console.log('No accounts found');
             }
         } catch(err) {
-            const { code } = err;
-            if (code === WALLET_STATUS.USER_REJECTED_THE_REQUEST) {
-                alert("Please, connect your wallet to proceed");
-            }
-            console.error(err);
-            throw new Error("No ethereum object.")
+            handleCatch(err);
         }
     };
 
@@ -44,12 +56,41 @@ export const TransactionProvider = ({ children }) => {
             console.log(accounts);
             setConnectedAccount(accounts[0]);
         } catch(err) {
-            const { code } = err;
-            if (code === WALLET_STATUS.USER_REJECTED_THE_REQUEST) {
-                alert("Please, connect your wallet to proceed");
-            }
-            console.error(err);
-            throw new Error("No ethereum object.")
+            handleCatch(err);
+        }
+    };
+
+    const sendTransaction = async () => {
+        try {
+            if (!ethereum) return alert("Please install metamask.");
+
+            const { addressTo, amount, keyword, message } = formData;
+            const transactionContract = getEthereumContract();
+            const parsedAmount = ethers.utils.parseEther(amount);
+
+            await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [{
+                    from: connectedAccount,
+                    to: addressTo,
+                    gas: '0x5208', // 21000 gwei
+                    value: parsedAmount._hex
+                }]
+            });
+
+            const transactionHash = await transactionContract.addToBlockchain(addressTo, parsedAmount, message, keyword);
+
+            setIsLoading(true);
+            console.log(`Loading - ${transactionHash.hash}`, JSON.parse());
+            await transactionHash.wait();
+            setIsLoading(false);
+            console.log(`Success - ${transactionHash.hash}`, JSON.parse());
+
+            const transactionCount = await transactionContract.getTransactionCount();
+            setTransactionCount(transactionCount);
+
+        } catch(error) {
+            handleCatch(error);
         }
     };
 
@@ -58,7 +99,7 @@ export const TransactionProvider = ({ children }) => {
     }, []);
 
     return (
-        <TransactionContext.Provider value={{ connectWallet }}>
+        <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, isLoading }}>
             {children}
         </TransactionContext.Provider>
     );

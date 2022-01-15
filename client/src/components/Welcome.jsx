@@ -14,17 +14,32 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
         placeholder={placeholder}
         step="0.0001"
         value={value}
-        onChange={(e) => handleChange(e)}
+        onChange={handleChange}
         className="w-full p-2 my-2 text-white bg-transparent border-none rounded-sm outline-none white-glassmorphism"
     />
 );
 
 const Welcome = () => {
-    const { connectWallet } = useContext(TransactionContext) || {};
-    const [isLoading, setIsLoading] = useState(false);
+    const {
+        connectWallet,
+        connectedAccount,
+        formData,
+        handleChange,
+        sendTransaction,
+        isLoading
+    } = useContext(TransactionContext) || {};
     
-    const handleChange = () => {};
-    const handleSubmit = () => {};
+    const handleSubmit = (e) => {
+        e.preventDefault;
+
+        const { addressTo, amount, keyword, message } = formData;
+        if (!addressTo || !amount || !keyword || !message) {
+            alert("Cannot process transaction with empty field(s)");
+            return;
+        } else {
+            sendTransaction();
+        }
+    };
 
     return (
         <div className="flex items-center justify-center w-full">
@@ -34,14 +49,16 @@ const Welcome = () => {
                     <p className="w-11/12 mt-5 font-light text-left text-white md:w-9/12">
                         Explore the crypto world. Buy and sell cryptocurrencies easily on Wall.eth
                     </p>
-                    <button
-                        type="button"
-                        onClick={connectWallet}
-                        className="flex flex-row w-full justify-center items-center my-5
-                        bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                    >
-                        <p className="text-base font-semibold text-white">Connect Wallet</p>
-                    </button>
+                    {!connectedAccount && (
+                        <button
+                            type="button"
+                            onClick={connectWallet}
+                            className="flex flex-row w-full justify-center items-center my-5
+                            bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+                        >
+                            <p className="text-base font-semibold text-white">Connect Wallet</p>
+                        </button>
+                    )}
                     <div className="grid w-full grid-cols-2 mt-10 sm:grid-cols-3">
                         <div className={`rounded-tl-2xl ${commonStyles}`}>Reliability</div>
                         <div className={commonStyles}>Security</div>
