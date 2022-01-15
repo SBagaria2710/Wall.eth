@@ -77,13 +77,16 @@ const Welcome = () => {
                                 </div>
                                 <BsInfoCircle fontSize={18} color="#fff" />
                             </div>
-                            <div>
-                                <p className="text-sm font-light text-white">
-                                    Address
-                                </p>
-                                <p className="mt-1 text-lg font-semibold text-white">
-                                    Ethereum
-                                </p>
+                            <div className="flex items-start justify-between">
+                                <div>
+                                    <p className="text-sm font-light text-white">
+                                        Address
+                                    </p>
+                                    <p className="mt-1 text-lg font-semibold text-white">
+                                        Ethereum
+                                    </p>
+                                </div>
+                                {connectedAccount && <p className="overflow-hidden text-sm text-white text-ellipsis">{connectedAccount}</p>}
                             </div>
                         </div>
                     </div>
