@@ -7,7 +7,7 @@ export const TransactionContext = createContext();
 const { ethereum } = window;
 
 const handleCatch = (err) => {
-    const { code } = err;
+    const { code } = err || {};
     if (code === WALLET_STATUS.USER_REJECTED_THE_REQUEST) {
         alert("Please, connect your wallet to proceed");
     }
