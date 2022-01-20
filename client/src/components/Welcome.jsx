@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SiEthereum } from 'react-icons/si';
 import { BsInfoCircle } from 'react-icons/bs';
 
+import { shortenAddress } from "../utils/shortenAddress";
 import { TransactionContext } from "../context/TransactionContext";
 
 const commonStyles="min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -86,7 +87,7 @@ const Welcome = () => {
                                         Ethereum
                                     </p>
                                 </div>
-                                {connectedAccount && <p className="overflow-hidden text-sm text-white text-ellipsis">{connectedAccount}</p>}
+                                {connectedAccount && <p className="overflow-hidden text-sm text-white text-ellipsis">{shortenAddress(connectedAccount)}</p>}
                             </div>
                         </div>
                     </div>

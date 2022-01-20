@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { HiMenuAlt4 } from 'react-icons/hi';
 import { AiOutlineClose } from 'react-icons/ai';
 
+import logo from '../../images/logo.png';
+
 const NavbarItem = ({ title, classProps }) => {
     return (
         <li className={`mx-4 cursor-pointer ${classProps}`}>
@@ -18,7 +20,9 @@ const Navbar = () => {
     return (
         <nav className="flex items-center justify-between w-full p-4 md:justify-center">
             <div className="md:flex-[0.5] flex-initial justify-center items-center">
-                <h3 className="w-32 text-xl font-semibold text-white cursor-pointer">Wall.eth</h3>
+                <h3 className="flex items-center w-32 text-xl font-semibold text-white cursor-pointer">
+                    <img src={logo} alt="wall.eth" className="w-10 h-10" />all.eth
+                </h3>
             </div>
             <ul className="flex-row items-center justify-between flex-initial hidden text-white list-none md:flex">
                 {["Market", "Exchange", "Tutorials", "Wallets"].map((item, index) => (
