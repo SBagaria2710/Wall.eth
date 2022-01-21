@@ -44,13 +44,13 @@ const TransactionCard = ({ addressTo, addressFrom, timestamp, message, keyword, 
 };
 
 const Transactions = () => {
-    const { connectedAccount, transactions } = useContext(TransactionContext) || {};
+    const { connectedAccount, transactions, transactionCount } = useContext(TransactionContext) || {};
 
     return (
         <div className="flex items-center justify-center w-full 2xl:px-20 gradient-bg-transactions">
             <div className="flex flex-col px-4 py-12 md:p-12">
                 <h3 className="my-2 text-3xl text-center text-white">
-                    {connectedAccount ? "Latest Tranactions" : "Connect your account to see the changes"}
+                    {connectedAccount ? `Latest Tranactions (${transactionCount})` : "Connect your account to see the changes"}
                 </h3>
                 <div className="flex flex-wrap items-center justify-center mt-10">
                     {transactions.reverse().map((transaction, index) => (

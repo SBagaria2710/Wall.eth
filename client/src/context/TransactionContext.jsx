@@ -9,7 +9,7 @@ const { ethereum } = window;
 const handleCatch = (err) => {
     const { code } = err || {};
     if (code === WALLET_STATUS.USER_REJECTED_THE_REQUEST) {
-        alert("Please, connect your wallet to proceed");
+        alert("Oops, Something went wrong.");
     }
     throw new Error("No ethereum object.")
 }
@@ -73,7 +73,7 @@ export const TransactionProvider = ({ children }) => {
     const checkIfTransactionsExist = async () => {
         try {
             const transactionContract = getEthereumContract();
-            const transactionCount = await transactionContract.getTransactionCount();
+            const transactionCount = await transactionContract.getTransactionsCount();
 
             window.localStorage.setItem("transactionCount", transactionCount);
         } catch(err) {
@@ -134,13 +134,14 @@ export const TransactionProvider = ({ children }) => {
     return (
         <TransactionContext.Provider value={{
             connectWallet,
-            connectedAccount,
-            formData,
             setFormData,
             handleChange,
             sendTransaction,
             isLoading,
-            transactions
+            transactions,
+            transactionCount,
+            connectedAccount,
+            formData,
         }}>
             {children}
         </TransactionContext.Provider>

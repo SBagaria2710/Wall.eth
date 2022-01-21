@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <div className="flex flex-col items-center justify-between w-full p-4 md:justify-cetner gradient-bg-footer">
             <div className="flex flex-col items-center w-full my-4 sm:flex-row jsutfy-between">
-                <div className="flex flex-[0.5] justify-center items-center text-white">
+                <div className="flex flex-[0.5] justify-center items-center text-white geo-font">
                     <img src={logo} alt="wall.eth" className="w-8 h-8" />all.eth
                 </div>
                 <div className="flex flex-wrap items-center flex-1 w-full mt-5 justify-evenly sm:mt-0">

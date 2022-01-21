@@ -13,6 +13,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: Geo;
+  src: url(../assets/Geo-Italic.ttf);
+}
+
+.geo-font {
+  font-family: "Geo", sans-serif;
+}
+
 .gradient-bg-welcome {
   background-color:#0f0e13;
   background-image: 
